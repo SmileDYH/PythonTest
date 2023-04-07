@@ -4,7 +4,8 @@ import asyncio
 
 
 """登录 -- java"""
-for i in range(2,4):
+# for语句遍历时遵循左闭右开的原则
+for i in range(1,50):
     url = "http://localhost:8088/jyw/login"
     params = {'apiID': '630ea04a-5dc6-4dd0-9bb9-e9806255dda3',
                 'userID': "tiku" + str(i),

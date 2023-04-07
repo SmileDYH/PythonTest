@@ -9,7 +9,7 @@ import asyncio
 # params = {'apiID': '630ea04a-5dc6-4dd0-9bb9-e9806255dda3',
 #             'apiPwd': 'cd7cc8',
 #             'school': 'zkhy',
-#             'userID': 'tiku39',
+#             'userID': 'tiku50',
 #             'userPwd': 'Abc123456',
 #             'userName': 'tiku',
 #             'userRole': '1',
@@ -20,7 +20,7 @@ import asyncio
 """登录 -- java"""
 url = "http://localhost:8088/jyw/login"
 params = {'apiID': '630ea04a-5dc6-4dd0-9bb9-e9806255dda3',
-            'userID': "tiku39",#tiku1、tiku2、tiku3、tiku4、tiku5...tiku39
+            'userID': "tiku50",#tiku1、tiku2、tiku3、tiku4、tiku5...tiku50
             'userPwd': 'Abc123456',
             'apiKey': 'c6dcfd230231467b86fd8cd5e869a05e'}
 token = "Token " + request_util.post_new(url, params)

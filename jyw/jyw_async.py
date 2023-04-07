@@ -2,7 +2,7 @@ from utils import request_util
 import datetime
 
 async def func1(token, url):
-    for page in range(1,70):
+    for page in range(1,10):
         params = {"subject":"chemistry2",
                     "tp":"1",
                     "dg":"0",#难度 13
