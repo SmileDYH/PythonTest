@@ -30,6 +30,8 @@ def get_database_connection(sql, table_name, data, dml):
                 result = select_batch(sql, table_name, cursor)
             elif dml == 'insert_one':
                 result = insert_one(sql, table_name, data, cursor)
+            elif dml == 'update_one':
+                update_one(sql, table_name, data, cursor)
             # 提交更改
             connection.commit()
             print("数据操作成功。")
@@ -79,3 +81,12 @@ def insert_one(sql, table_name, data, cursor):
     print(table_name + "保存成功")
     # 这个是之前从 exam_answer_sheet_58 表插入记录后得到的 sheet_id
     return cursor.lastrowid
+
+
+# 单条更新
+def update_one(sql, table_name, data, cursor):
+    print('update_one')
+    global result
+    # 执行查询
+    cursor.execute(sql)
+    print(table_name + "更新成功")
