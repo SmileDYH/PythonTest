@@ -28,8 +28,8 @@ def get_database_connection(sql, table_name, data, dml):
                 result = select_one(sql, table_name, cursor)
             elif dml == 'select_batch':
                 result = select_batch(sql, table_name, cursor)
-            elif dml == 'insert_batch':
-                insert_batch(sql, table_name, data, cursor)
+            elif dml == 'insert_one':
+                result = insert_one(sql, table_name, data, cursor)
             # 提交更改
             connection.commit()
             print("数据操作成功。")
@@ -73,7 +73,9 @@ def select_batch(sql, table_name, cursor):
 
 
 # 批量插入
-def insert_batch(sql, table_name, data, cursor):
+def insert_one(sql, table_name, data, cursor):
     # 执行插入操作
     cursor.execute(sql, data)
     print(table_name + "保存成功")
+    # 这个是之前从 exam_answer_sheet_58 表插入记录后得到的 sheet_id
+    return cursor.lastrowid
