@@ -2,10 +2,12 @@ import sys
 from utils import database_util
 from exam import scan_assembly_data
 
+# 【跳过扫描、分发、识别，直接落地（正常落地的都是实考，可以模拟异常题卡，暂不支持特殊题型[拆分、选考等]）】
 # 定义变量
 # 1. 查询（链接数据库）
 # 2. 拼装数据
 # 3. 保存/修改 exam_answer_sheet、exam_answer_sheet_question、 exam_course_relation表
+
 
 # 扫描识别，各种校验后面再补充，先把主流程跑通
 def insert_default_values(exam_id, course_id, school_id):
@@ -61,12 +63,15 @@ def insert_default_values(exam_id, course_id, school_id):
                                                                  row['course_name'], row['student_id'], row['exam_code'], True)
         print("primary_id" + str(primary_id))
         # 插入小题 template_question_id = paperQuestionId
+        data = []
         for row1 in exam_paper_question_list:
             print(row1)
-            scan_assembly_data.insert_exam_answer_sheet_question(primary_id, exam_id, exam_course_relation['id'],
-                                                                 course_id, school_id, row['student_id'], row1['id'], row1['question_id'],
-                                                                 row1['question_number'], row1['question_order'],
-                                                                 row1['is_subjective'], row1['type_detail_id'])
+            scan_assembly_data.add_data_list(data, primary_id, exam_id, exam_paper['id'],
+                                             course_id, school_id, row['student_id'], row1['id'], row1['question_id'],
+                                             row1['question_number'], row1['question_order'],
+                                             row1['is_subjective'], row1['type_detail_id'])
+        print(data)
+        scan_assembly_data.insert_exam_answer_sheet_question(data, exam_id)
     print('5. ')
 
     # exam_student_ 表状态更新 paper_id 是 exam_course_relation_id ！！！
@@ -99,7 +104,7 @@ def test():
 # main方法需要放到最后，要不然调用不到其他方法
 if __name__ == "__main__":
     # insert_default_values(sys.argv[0], sys.argv[1])
-    insert_default_values(12453, 10010, 182769)
+    insert_default_values(12453, 10002, 182769)
     # test()
     # todo 调用任务分配接口, 怎么自动分配的; 暂不支持拆分题、选做题等
 

@@ -76,6 +76,8 @@ def execute_sql(sql, table_name, data, dml, cursor):
         result = select_batch(sql, table_name, cursor)
     elif dml == 'insert_one':
         result = insert_one(sql, table_name, data, cursor)
+    elif dml == 'insert_batch':
+        result = insert_batch(sql, table_name, data, cursor)
     elif dml == 'update_one':
         update_one(sql, table_name, data, cursor)
     return result
@@ -92,7 +94,7 @@ def select_one(sql, table_name, cursor):
     if result:
         # 打印第一条查询结果
         # print({result[0]})
-        print(list(result.items())[0])
+        print(list(result.items())[0])  # 字典数元组
         return result
     else:
         print(table_name + '数据不存在')
@@ -109,10 +111,19 @@ def select_batch(sql, table_name, cursor):
     return result
 
 
-# 批量插入
+# 单条插入
 def insert_one(sql, table_name, data, cursor):
     # 执行插入操作
     cursor.execute(sql, data)
+    print(table_name + "保存成功")
+    # 这个是之前从 exam_answer_sheet_58 表插入记录后得到的 sheet_id
+    return cursor.lastrowid
+
+
+# 批量插入
+def insert_batch(sql, table_name, data, cursor):
+    # 执行插入操作
+    cursor.executemany(sql, data)
     print(table_name + "保存成功")
     # 这个是之前从 exam_answer_sheet_58 表插入记录后得到的 sheet_id
     return cursor.lastrowid

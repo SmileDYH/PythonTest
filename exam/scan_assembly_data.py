@@ -63,19 +63,9 @@ def insert_exam_answer_sheet(exam_id, paper_id, school_id, class_id, class_name,
 
 
 # 插入考试答题记录 paper_id 是 exam_course_relation_id
-def insert_exam_answer_sheet_question(sheet_id, exam_id, paper_id, course_id, school_id, student_id, template_question_id,
-                                      question_id, question_number, question_order, is_subjective, type_detail_id):
+def insert_exam_answer_sheet_question(data, exam_id):
     # 定义变量
     table_name = 'exam_answer_sheet_question_' + str(exam_id % 256)
-    # 默认值
-    raw_scan = None  # 原始*题目区域*扫描文件
-    is_white = 1  # 主观题是否未答:1已答题，0未答题
-    status = 0  # 是否批改完成 (0: False, 1: True)
-    risk_level = '0'  # 异常类型
-    choose_quest = 0  # 选考题学生是否选做：0选考题学生没选或非选考题，1选考题学生选
-    total_math_score = 0.0  # 数学-填空题批阅总分
-    split_status = 0  # 拆分状态:0默认拆分成功，1不成功
-    create_by = 1
 
     # 定义 SQL 插入查询语句
     insert_exam_answer_sheet_question_query = 'INSERT INTO ' + table_name + """ 
@@ -89,6 +79,34 @@ def insert_exam_answer_sheet_question(sheet_id, exam_id, paper_id, course_id, sc
     """
     print(insert_exam_answer_sheet_question_query)
 
+    # 创建数据元组（单条插入）
+    # data = (
+    #     sheet_id, exam_id, paper_id, course_id, school_id, student_id,
+    #     raw_scan, template_question_id, question_id, question_number,
+    #     is_white, question_order, status, risk_level,
+    #     choose_quest, is_subjective, type_detail_id, total_math_score,
+    #     split_status, create_by
+    # )
+    # print(data)
+
+    # 执行插入操作
+    database_util.get_database_connection(insert_exam_answer_sheet_question_query, table_name, data, 'insert_batch')
+
+
+# 批量插入，拼data数据
+def add_data_list(data_list, sheet_id, exam_id, paper_id, course_id, school_id, student_id, template_question_id,
+                  question_id, question_number, question_order, is_subjective, type_detail_id):
+    # 默认值
+    raw_scan = 'https://oss.xinjiaoyu.com/exam/test/182769/23449/041A23330014AZ_20241022145309_0105/write_question_二_2.jpg'  # 原始*题目区域*扫描文件
+    is_white = 1  # 主观题是否未答:1已答题，0未答题
+    status = 0  # 是否批改完成 (0: False, 1: True)
+    risk_level = '0'  # 异常类型
+    # 边扫边批时，状态被赋予了新挂概念
+    choose_quest = 1  # 选考题学生是否选做：0选考题学生没选，1选考题学生选或非选考题
+    total_math_score = 0.0  # 数学-填空题批阅总分
+    split_status = 0  # 拆分状态:0默认拆分成功，1不成功
+    create_by = 1
+
     # 创建数据元组
     data = (
         sheet_id, exam_id, paper_id, course_id, school_id, student_id,
@@ -98,5 +116,4 @@ def insert_exam_answer_sheet_question(sheet_id, exam_id, paper_id, course_id, sc
         split_status, create_by
     )
     print(data)
-    # 执行插入操作
-    database_util.get_database_connection(insert_exam_answer_sheet_question_query, table_name, data, 'insert_one')
+    data_list.append(data)
