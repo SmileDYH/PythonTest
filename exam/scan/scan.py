@@ -1,6 +1,6 @@
 import sys
 from utils import database_util
-from exam import scan_assembly_data
+from exam.scan import scan_assembly_data
 
 # 【跳过扫描、分发、识别，直接落地（正常落地的都是实考，可以模拟异常题卡，暂不支持特殊题型[拆分、选考等]）】
 # 定义变量
@@ -11,6 +11,9 @@ from exam import scan_assembly_data
 
 # 扫描识别，各种校验后面再补充，先把主流程跑通
 def insert_default_values(exam_id, course_id, school_id):
+    # 本地执行.py 需要转换数据类型
+    exam_id = int(exam_id)
+    print(exam_id, course_id, school_id)
     # 获取 exam_course_relation, 校验表不为空，且状态为4
     query = """
             SELECT id, state 
@@ -103,8 +106,9 @@ def test():
 
 # main方法需要放到最后，要不然调用不到其他方法
 if __name__ == "__main__":
-    # insert_default_values(sys.argv[0], sys.argv[1])
-    insert_default_values(12453, 10002, 182769)
+    # sys.argv[0], 第 0 个参数始终是脚本的文件名(例如：scan.py)
+    insert_default_values(sys.argv[1], sys.argv[2], sys.argv[3])
+    # insert_default_values(12453, 10002, 182769)
     # test()
     # todo 调用任务分配接口, 怎么自动分配的; 暂不支持拆分题、选做题等
 
